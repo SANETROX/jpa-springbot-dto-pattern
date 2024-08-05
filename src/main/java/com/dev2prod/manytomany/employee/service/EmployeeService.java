@@ -30,17 +30,14 @@ public class EmployeeService {
     }
 
     public List<EmployeeDTO> getEmployeeDetails(Long empId) {
+        List<Employee> employees;
         if (null != empId) {
-            List<Employee> employees = employeeRepository.findAllByEmpId(empId); //
-            List<EmployeeDTO> employeesDTO= employees.stream().map(
-                    EmployeeMapper.mapper::toEmployeeDTO).collect(Collectors.toList());
-            return employeesDTO;
+            employees = employeeRepository.findAllByEmpId(empId);
         } else {
-            List<Employee> employees = employeeRepository.findAll();
-            List<EmployeeDTO> employeesDTO= employees.stream().map(
-                    EmployeeMapper.mapper::toEmployeeDTO).collect(Collectors.toList());
-            return employeesDTO;
+            employees = employeeRepository.findAll();
         }
+        return employees.stream().map(
+                EmployeeMapper.mapper::toEmployeeDTO).collect(Collectors.toList());
     }
 
     public void deleteEmployee(Long empId) {
@@ -56,7 +53,9 @@ public class EmployeeService {
         return employeeRepository.save(employee);
     }
 
-    public Employee saveEmployeetWhitManyProjects(Employee employee) {
+    public EmployeeDTO saveEmployeetWhitManyProjects(EmployeeDTO employeeDTO) {
+
+        Employee employee = EmployeeMapper.mapper.toEmployee(employeeDTO);
         // Mantén los proyectos
         Set<Project> currentProjects = employee.getAssignedProjects();
         Set<Project> projects = new HashSet<>(currentProjects);
@@ -64,7 +63,7 @@ public class EmployeeService {
             projects.add(projectRepository.save(project));
         }
         employee.setAssignedProjects(projects);
-        return employeeRepository.save(employee);
+        return EmployeeMapper.mapper.toEmployeeDTO(employeeRepository.save(employee));
     }
 
     public Employee updateEmployeeComplete(Long empId, Employee employee) {

@@ -53,10 +53,8 @@ public class EmployeeController {
     }
 
     @PostMapping("/saveEmployeetWhitManyProjects")
-    public ResponseEntity<Employee> saveEmployeetWhitManyProjects(@RequestBody Employee empObj) {
-          Set<Project> projects = empObj.getAssignedProjects();
-          System.out.println(projects);
-        Employee createdEmployee = employeeService.saveEmployeetWhitManyProjects(empObj);
+    public ResponseEntity<EmployeeDTO> saveEmployeetWhitManyProjects(@RequestBody EmployeeDTO empObj) {
+        EmployeeDTO createdEmployee = employeeService.saveEmployeetWhitManyProjects(empObj);
         return ResponseEntity.ok(createdEmployee);
     }
 
