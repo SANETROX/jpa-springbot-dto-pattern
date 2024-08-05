@@ -14,8 +14,8 @@ public class ProjectService {
     @Autowired
     private ProjectRepository projectRepository;
 
-    public void saveProject(Project projectObj) {
-        projectRepository.save(projectObj);
+    public Project saveProject(Project projectObj) {
+        return projectRepository.save(projectObj);
     }
 
     public List<Project> getProjectDetails(Long projectId) {

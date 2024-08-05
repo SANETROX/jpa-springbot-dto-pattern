@@ -2,12 +2,14 @@ package com.dev2prod.manytomany.employee.controller;
 
 import com.dev2prod.manytomany.employee.entity.Employee;
 import com.dev2prod.manytomany.employee.service.EmployeeService;
+import com.dev2prod.manytomany.project.entity.Project;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Set;
 
 @RestController
 @RequestMapping("/employee")
@@ -18,8 +20,8 @@ public class EmployeeController {
 
     @PostMapping("/save")
     public ResponseEntity<Employee> saveEmployee(@RequestBody Employee empObj) {
-        employeeService.saveEmployee(empObj);
-        return new ResponseEntity<>(HttpStatus.CREATED);
+        Employee createdEmployee =employeeService.saveEmployee(empObj);
+        return ResponseEntity.ok(createdEmployee);
     }
 
     @GetMapping(value = {"/getEmployees", "/{empId}"})
@@ -34,10 +36,25 @@ public class EmployeeController {
     }
 
     @PutMapping("/{empId}/project/{projectId}")
-    public Employee assignProjectToEmployee(
+    public ResponseEntity<Employee> assignProjectToEmployee(
             @PathVariable Long empId,
             @PathVariable Long projectId
     ){
-        return employeeService.assignProjectToEmployee(empId, projectId);
+        Employee employee = employeeService.assignProjectToEmployee(empId, projectId);
+        return ResponseEntity.ok(employee);
+    }
+
+    @PostMapping("/saveEmployeetWhitManyProjects")
+    public ResponseEntity<Employee> saveEmployeetWhitManyProjects(@RequestBody Employee empObj) {
+          Set<Project> projects = empObj.getAssignedProjects();
+          System.out.println(projects);
+        Employee createdEmployee = employeeService.saveEmployeetWhitManyProjects(empObj);
+        return ResponseEntity.ok(createdEmployee);
+    }
+
+    @PutMapping("/update/{empId}")
+    public ResponseEntity<Employee> updateEmployeeComplete(@PathVariable Long empId, @RequestBody Employee employee) {
+        Employee updatedEmployee = employeeService.updateEmployeeComplete(empId, employee);
+        return ResponseEntity.ok(updatedEmployee);
     }
 }

@@ -17,9 +17,9 @@ public class ProjectController {
     private ProjectService projectService;
 
     @PostMapping("/save")
-    public ResponseEntity createProject(@RequestBody Project projectObj) {
-        projectService.saveProject(projectObj);
-        return new ResponseEntity(HttpStatus.CREATED);
+    public ResponseEntity<Project> createProject(@RequestBody Project projectObj) {
+        Project project = projectService.saveProject(projectObj);
+        return ResponseEntity.ok(project);
     }
 
     @GetMapping(value = {"/getProjects", "/{projectId}"})
