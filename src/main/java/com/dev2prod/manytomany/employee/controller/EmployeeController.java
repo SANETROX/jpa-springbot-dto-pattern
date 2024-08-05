@@ -20,11 +20,6 @@ public class EmployeeController {
     @Autowired
     private EmployeeService employeeService;
 
-//    @PostMapping("/save")
-//    public ResponseEntity<Employee> saveEmployee(@RequestBody Employee empObj) {
-//        Employee createdEmployee =employeeService.saveEmployee(empObj);
-//        return ResponseEntity.ok(createdEmployee);
-//    }
 
     @PostMapping("/save")
     public ResponseEntity<EmployeeDTO> saveEmployee(@RequestBody EmployeeDTO empObj) {
