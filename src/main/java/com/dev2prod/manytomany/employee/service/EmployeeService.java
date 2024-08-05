@@ -1,5 +1,7 @@
 package com.dev2prod.manytomany.employee.service;
 
+import com.dev2prod.manytomany.employee.dto.EmployeeDTO;
+import com.dev2prod.manytomany.employee.dto.EmployeeMapper;
 import com.dev2prod.manytomany.employee.entity.Employee;
 import com.dev2prod.manytomany.employee.repository.EmployeeRepository;
 import com.dev2prod.manytomany.project.entity.Project;
@@ -11,6 +13,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 @Service
 public class EmployeeService {
@@ -21,16 +24,22 @@ public class EmployeeService {
     @Autowired
     private ProjectRepository projectRepository;
 
-    public Employee saveEmployee(Employee empObj) {
-        return employeeRepository.save(empObj);
+    public EmployeeDTO saveEmployee(EmployeeDTO empObj) {
+        Employee employee = EmployeeMapper.mapper.toEmployee(empObj);
+        return EmployeeMapper.mapper.toEmployeeDTO(employeeRepository.save(employee));
     }
 
-    public List<Employee> getEmployeeDetails(Long empId) {
+    public List<EmployeeDTO> getEmployeeDetails(Long empId) {
         if (null != empId) {
             List<Employee> employees = employeeRepository.findAllByEmpId(empId); //
-            return employees;
+            List<EmployeeDTO> employeesDTO= employees.stream().map(
+                    EmployeeMapper.mapper::toEmployeeDTO).collect(Collectors.toList());
+            return employeesDTO;
         } else {
-            return employeeRepository.findAll();
+            List<Employee> employees = employeeRepository.findAll();
+            List<EmployeeDTO> employeesDTO= employees.stream().map(
+                    EmployeeMapper.mapper::toEmployeeDTO).collect(Collectors.toList());
+            return employeesDTO;
         }
     }
 
